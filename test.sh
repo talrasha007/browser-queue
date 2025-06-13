@@ -1,0 +1,1 @@
+curl -i http://127.0.0.1:3000/api/push -X POST -H "Content-Type: application/json" -d '{"ip": "127.0.0.1", "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1", "url": "https://tiktoklitebr.sjv.io/raeV3R"}'
