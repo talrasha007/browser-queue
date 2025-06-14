@@ -31,6 +31,7 @@ interface QueueItem {
 
       page.on('request', request => {
         const url = request.url();
+        console.log('Accessing:', url);
         const hostname = new URL(url).hostname;
 
         // 拦截 *.google.com 和 *.apple.com 下的所有请求
