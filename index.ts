@@ -25,6 +25,30 @@ interface QueueItem {
         'X-Forwarded-For': item.ip,
         'X-Real-IP': item.ip,
       });
+
+      // 启用请求拦截（必须在任何 navigation 之前）
+      await page.setRequestInterception(true);
+
+      page.on('request', request => {
+        const url = request.url();
+        const hostname = new URL(url).hostname;
+
+        // 拦截 *.google.com 和 *.apple.com 下的所有请求
+        if (hostname.endsWith('google.com') || hostname.endsWith('apple.com')) {
+          // 如果你想要“返回空页面”，可用 request.respond 模拟 200+空 body：
+          return request.respond({
+            status: 200,
+            contentType: 'text/html',
+            body: '<html><body></body></html>'
+          });
+          // 或者直接 abort，返回失败：
+          // return request.abort();
+        }
+
+        // 其它请求正常继续
+        request.continue();
+      });
+
       console.log(`Consuming ${item.url} with UA ${item.ua}, IP ${item.ip}`);
       await page.goto(item.url).catch(console.error);
       await browser.close();
