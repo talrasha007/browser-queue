@@ -26,6 +26,13 @@ interface QueueItem {
         'X-Real-IP': item.ip,
       });
 
+      let navigatedToNonHttp = false;
+      const cdp = await page.createCDPSession();
+      await cdp.send('Network.enable');
+      cdp.on('Network.requestWillBeSent', msg => {
+        navigatedToNonHttp = !msg.documentURL.startsWith('http');
+      });
+
       // 启用请求拦截（必须在任何 navigation 之前）
       await page.setRequestInterception(true);
 
@@ -42,8 +49,6 @@ interface QueueItem {
             contentType: 'text/html',
             body: '<html><body></body></html>'
           });
-          // 或者直接 abort，返回失败：
-          // return request.abort();
         }
 
         // 其它请求正常继续
@@ -51,7 +56,7 @@ interface QueueItem {
       });
 
       console.log(`Consuming ${item.url} with UA ${item.ua}, IP ${item.ip}`);
-      await page.goto(item.url).catch(console.error);
+      await page.goto(item.url).catch(e => { if (!navigatedToNonHttp) console.error(e) });
       await browser.close();
     } else {
       await new Promise((resolve) => setTimeout(resolve, 1000));
