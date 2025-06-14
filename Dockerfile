@@ -6,6 +6,8 @@ USER root
 ENV XDG_CONFIG_HOME=/tmp/.chromium
 ENV XDG_CACHE_HOME=/tmp/.chromium
 
+USER pptruser
+
 RUN curl -fsSL https://bun.sh/install | bash
 ENV BUN_INSTALL="/root/.bun"
 ENV PATH="$BUN_INSTALL/bin:$PATH"
@@ -16,8 +18,6 @@ COPY package.json bun.lock ./
 RUN bun install
 
 COPY . .
-
-USER pptruser
 
 EXPOSE 3000
 
