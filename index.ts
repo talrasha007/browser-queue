@@ -26,7 +26,7 @@ interface QueueItem {
         'X-Real-IP': item.ip,
       });
       console.log(`Consuming ${item.url} with UA ${item.ua}, IP ${item.ip}`);
-      await page.goto(item.url);
+      await page.goto(item.url).catch(console.error);
       await browser.close();
     } else {
       await new Promise((resolve) => setTimeout(resolve, 1000));
