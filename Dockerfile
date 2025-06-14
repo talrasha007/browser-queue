@@ -1,10 +1,10 @@
 FROM ghcr.io/puppeteer/puppeteer:latest
 
-# USER root
+USER root
 
-# # 设置 Chrome 配置缓存目录，避免运行时报错
-# ENV XDG_CONFIG_HOME=/tmp/.chromium
-# ENV XDG_CACHE_HOME=/tmp/.chromium
+# 设置 Chrome 配置缓存目录，避免运行时报错
+ENV XDG_CONFIG_HOME=/tmp/.chromium
+ENV XDG_CACHE_HOME=/tmp/.chromium
 
 # USER pptruser
 
