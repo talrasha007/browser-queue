@@ -10,10 +10,15 @@ interface QueueItem {
 };
 
 (async function () {
+  const isRoot = process.getuid && process.getuid() === 0;
+  const args = isRoot ? ['--no-sandbox', '--disable-setuid-sandbox'] : [];
   while (true) {
     const item = queue.shift();
     if (item) {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({ 
+          headless: true,
+          args
+        });
       const page = await browser.newPage();
       await page.setUserAgent(item.ua);
       await page.setExtraHTTPHeaders({
